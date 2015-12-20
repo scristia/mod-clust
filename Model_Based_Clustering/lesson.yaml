@@ -239,13 +239,13 @@
 - Class: cmd_question
   Output: "Let's plot the classifications. Set what='classification'. "
   CorrectAnswer: mclust2Dplot(data = mv, what = 'classification', parameters = mvMclust$parameters, z = mvMclust$z)
-  AnswerTests: omnitest(correctExpr='mclust2Dplot(data = mv, what = 'classification', parameters = mvMclust$parameters, z = mvMclust$z)')
+  AnswerTests: omnitest(correctExpr='mclust2Dplot(data = mv, what = "classification", parameters = mvMclust$parameters, z = mvMclust$z)')
   Hint: "type mclust2Dplot(data = mv, what = 'classification', parameters = mvMclust$parameters, z = mvMclust$z)"
 
 - Class: cmd_question
   Output: "Great. It appears the clustering does a better job that the previous kmeans. We can also assess the uncertainty among the samples classifications.
   Let's visualize the uncertainty by typing the same code as before but changing what='uncertainty'."
-  CorrectAnswer: mclust2Dplot(data = mv, what = 'uncertainty', parameters = mvMclust$parameters, z = mvMclust$z)
+  CorrectAnswer: mclust2Dplot(data = mv, what = "uncertainty", parameters = mvMclust$parameters, z = mvMclust$z)
   AnswerTests: omnitest(correctExpr='mclust2Dplot(data = mv, what = 'uncertainty', parameters = mvMclust$parameters, z = mvMclust$z)')
   Hint: "type mclust2Dplot(data = mv, what = 'uncertainty', parameters = mvMclust$parameters, z = mvMclust$z)"
 
@@ -301,7 +301,7 @@
 - Class: cmd_question
   Output: "Finally, let's plot our clustering. Use plot(X, what='classification')."
   CorrectAnswer: plot(X, what='classification')
-  AnswerTests: omnitest(correctExpr='plot(X, what='classification')')
+  AnswerTests: omnitest(correctExpr='plot(X, what="classification")')
   Hint: "plot(X, what='classification')"
   
 - Class: text
