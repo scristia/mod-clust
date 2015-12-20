@@ -246,7 +246,7 @@
   Output: "Great. It appears the clustering does a better job that the previous kmeans. We can also assess the uncertainty among the samples classifications.
   Let's visualize the uncertainty by typing the same code as before but changing what='uncertainty'."
   CorrectAnswer: mclust2Dplot(data = mv, what = "uncertainty", parameters = mvMclust$parameters, z = mvMclust$z)
-  AnswerTests: omnitest(correctExpr='mclust2Dplot(data = mv, what = 'uncertainty', parameters = mvMclust$parameters, z = mvMclust$z)')
+  AnswerTests: omnitest(correctExpr='mclust2Dplot(data = mv, what = "uncertainty", parameters = mvMclust$parameters, z = mvMclust$z)')
   Hint: "type mclust2Dplot(data = mv, what = 'uncertainty', parameters = mvMclust$parameters, z = mvMclust$z)"
 
 - Class: text
@@ -293,16 +293,16 @@
   Hint: "mod = Mclust(X)"
 
 - Class: cmd_question
-  Output: "Use summary() to check out the clustering results."
-  CorrectAnswer: summary(mod)
-  AnswerTests: omnitest(correctExpr='summary(mod)')
-  Hint: "summary(mod)"
+  Output: "Use summary() to check out the clustering results. Use the parameters option set to TRUE."
+  CorrectAnswer: summary(mod, parameters=TRUE)
+  AnswerTests: omnitest(correctExpr='summary(mod, parameters=TRUE))')
+  Hint: "summary(mod, parameters=TRUE))"
 
 - Class: cmd_question
-  Output: "Finally, let's plot our clustering. Use plot(X, what='classification')."
-  CorrectAnswer: plot(X, what='classification')
+  Output: "Finally, let's plot our clustering. Use plot(mod, what='classification')."
+  CorrectAnswer: plot(mod, what='classification')
   AnswerTests: omnitest(correctExpr='plot(X, what="classification")')
-  Hint: "plot(X, what='classification')"
+  Hint: "plot(mod, what='classification')"
   
 - Class: text
   Output: "Amazing job! I hope you learned a lot about model based clustering!!!"
