@@ -295,8 +295,8 @@
 - Class: cmd_question
   Output: "Use summary() to check out the clustering results. Use the parameters option set to TRUE."
   CorrectAnswer: summary(mod, parameters=TRUE)
-  AnswerTests: omnitest(correctExpr='summary(mod, parameters=TRUE))')
-  Hint: "summary(mod, parameters=TRUE))"
+  AnswerTests: omnitest(correctExpr='summary(mod, parameters=TRUE)')
+  Hint: "summary(mod, parameters=TRUE)"
 
 - Class: cmd_question
   Output: "Finally, let's plot our clustering. Use plot(mod, what='classification')."
