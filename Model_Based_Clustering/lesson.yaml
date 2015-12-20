@@ -1,0 +1,308 @@
+- Class: meta
+  Course: mod-clust
+  Lesson: Model Based Clustering
+  Author: Stephen Cristiano
+  Type: Standard
+  Organization: Johns Hopkins University
+  Version: 2.2.21
+
+- Class: text
+  Output: "This module will walk you through how to do model
+  based clustering in R. A popular package for performing model
+  based clustering is mclust. Let's begin by installing this package."
+
+- Class: figure
+  Output: "A short background on clustering and model based clustering is provided to help you understand the problem.
+  I recommend you check back to it throughout the tutorial."
+  Figure: modclust.R
+  FigureType: new
+
+- Class: exact_question
+  Output: "How many parameters does a 3 component (univariate) Gaussian Mixture Model have?"
+  CorrectAnswer: 8
+  AnswerTests: omnitest(correctVal=8)
+  Hint: "Remember the constraint on the mixing proportions."
+
+- Class: mult_question
+  Output: "For k-means clustering, what function c(S) are we trying to minimize to obtain
+  the optimal clustering S?"
+  AnswerChoices: Average squared distance;Average absolute difference;Log likelihood; Hausdorff distance
+  CorrectAnswer: Average squared distance;
+  AnswerTests: omnitest(correctVal= 'Average squared distance')
+  Hint: "Average squared distance"
+
+- Class: cmd_question
+  Output: "Before we begin with coding, let's set our seed. Use the function set.seed() and set the seed to 1234."
+  CorrectAnswer: set.seed(1234)
+  AnswerTests: omnitest(correctExpr='set.seed(1234)')
+  Hint: "Type set.seed(1234)"
+  
+
+- Class: cmd_question
+  Output: "Let's simulate data from a a mixture of multivariate normal distributions. Before we do so,
+  we need to make sure the 'MASS' library is loaded. Load the library now."
+  CorrectAnswer: library(MASS)
+  AnswerTests: omnitest(correctExpr='library(MASS)')
+  Hint: type library(MASS)
+  
+- Class: cmd_question
+  Output: "Now let's simulate from the first component. Use the mvrnorm function to simulate
+  400 draws from a bivariate normal distribution with mean vector (0,0) and covariance matrix
+  [(1,0.4), (0.4, 1)] (that is, both variances equal 1 and covariance 0.4). Save it to a variable named
+  mv1."
+  CorrectAnswer: mv1=mvrnorm(400, c(0,0), matrix(c(1, 0.4, 0.4, 1), 2))
+  AnswerTests: omnitest(correctExpr='mv1=mvrnorm(400, c(0,0), matrix(c(1, 0.4, 0.4, 1), 2))')
+  Hint: "type mv1=mvrnorm(400, c(0,0), matrix(c(1, 0.4, 0.4, 1), 2))"
+
+- Class: cmd_question
+  Output: "Now let's simulate from the second component. Use the mvrnorm function to simulate
+  400 draws from a bivariate normal distribution with mean vector (3,3) and covariance matrix
+  [(1,0), (0, 1)]. Save it to a variable named mv2."
+  CorrectAnswer: mv2=mvrnorm(400, c(3,3), matrix(c(1, 0, 0, 2), 2))
+  AnswerTests: omnitest(correctExpr='mv2=mvrnorm(400, c(3,3), matrix(c(1, 0, 0, 2), 2))')
+  Hint: "type mv2=mvrnorm(400, c(3,3), matrix(c(1, 0, 0, 2), 2))"
+
+- Class: cmd_question
+  Output: "Lastly, simulate from the third component. Simulate
+  200 draws from a bivariate normal distribution with mean vector (0,4) and covariance matrix
+  [(0.4,0), (0, 0.1)]. Save it to a variable named mv3."
+  CorrectAnswer: mv3=mvrnorm(200, c(0,4), matrix(c(0.4, 0, 0, 0.1), 2))
+  AnswerTests: omnitest(correctExpr='mv3=mvrnorm(200, c(0,4), matrix(c(0.4, 0, 0, 0.1), 2))')
+  Hint: "Type mv3=mvrnorm(200, c(0,4), matrix(c(0.4, 0, 0, 0.1), 2))"
+
+- Class: cmd_question
+  Output: "Now let's combine the three components into one data matrix. Use
+  rbind on mv1, mv2, and mv3 and save it to a variable named mv."
+  CorrectAnswer: mv=rbind(mv1, mv2, mv3)
+  AnswerTests: omnitest(correctExpr='mv=rbind(mv1, mv2, mv3)')
+  Hint: "Type mv=rbind(mv1, mv2, mv3)"
+
+- Class: mult_question
+  Output: "What are the the mixing proportions of this mixture distribution we just simulated?"
+  AnswerChoices: (0.4,0.4,0.2);(0.5,0.4,0.1);(0.1,0.2,0.7);(0.3,0.3,0.4)
+  CorrectAnswer: (0.4,0.4,0.2)
+  AnswerTests: omnitest(correctVal= '(0.4,0.4,0.2)')
+  Hint: "(0.4,0.4,0.2)"
+
+- Class: cmd_question
+  Output: "Let's take a look at the data we just simulated. Plot the data in mv using the plot
+  function with pch=20"
+  CorrectAnswer: plot(mv, pch=20)
+  AnswerTests: omnitest(correctExpr='plot(mv, pch=20)')
+  Hint: "Type plot(mv, pch=20)"
+
+- Class: text
+  Output: "We will cluster this simulated data using K-means in R. The
+  kmeans function is part of the stats library which is maintained by the R Core Team."
+  
+- Class: cmd_question
+  Output: "Take a look at the help file for the kmeans function."
+  CorrectAnswer: ?kmeans
+  AnswerTests: omnitest(correctExpr='?kmeans')
+  Hint: "Type ?kmeans"
+
+- Class: mult_question
+  Output: "What is the default algorithm for performing K-means clustering in R's 
+  kmeans() function?"
+  AnswerChoices: Hartigan-Wong;Lloyd;Forgy;MacQueen
+  CorrectAnswer: Hartigan-Wong
+  AnswerTests: omnitest(correctVal= 'Hartigan-Wong')
+  Hint: "Hartigan-Wong"
+
+- Class: cmd_question
+  Output: "Great. Now let's perform k-means clustering on our simulated data. Since we know the truth,
+  we will initiate K=3. To avoid getting caught in local modes, use 5 random starting values (using nstart parameter). Save the output
+  to a variable named kmv"
+  CorrectAnswer: kmv=kmeans(mv, centers=3, nstart=5)
+  AnswerTests: omnitest(correctExpr='kmv=kmeans(mv, centers=3, nstart=5)')
+  Hint: "Type kmv=kmeans(mv, centers=3, nstart=5)"
+
+- Class: cmd_question
+  Output: "kmv is an S3 object of the class 'kmeans'. You can look
+  at its structure with str()."
+  CorrectAnswer: str(kmv)
+  AnswerTests: omnitest(correctExpr='str(kmv)')
+  Hint: "Type str(kmv)"
+
+- Class: cmd_question
+  Output: "Take a look at the centers discovered by kmeans. If the clustering worked well,
+  you should see values close to the means of the distributions we simulated from."
+  CorrectAnswer: kmv$centers
+  AnswerTests: omnitest(correctExpr='kmv$centers')
+  Hint: "type kmv$centers"
+  
+- Class: cmd_question
+  Output: "Let's plot the data again but now with colors according to which cluster the invidiual
+  samples were assigned to via k-means. Create a vector of length 1000 with the colors 'blue', 'darkgreen', and 'tomato2'
+  in the same order as the cluster assignments in kmv. Assign this vector to a variable named cols."
+  CorrectAnswer: cols <- c("blue", "darkgreen", "tomato2")[kmv$cluster]
+  AnswerTests: omnitest(correctExpr='cols <- c("blue", "darkgreen", "tomato2")[kmv$cluster]')
+  Hint: type cols <- c("blue", "darkgreen", "tomato2")[kmv$cluster]
+  
+- Class: cmd_question
+  Output: "Now plot the data again with pch=20 and col equal to the color vector just assigned."
+  CorrectAnswer: plot(mv, pch=20, col=cols)
+  AnswerTests: omnitest(correctExpr='plot(mv, pch=20, col=cols)')
+  Hint: "type plot(mv, pch=20, col=cols)"
+
+- Class: text
+  Output: "Next, list try clustering our simulated data using a finite mixture model.
+  The package we will use is modclust, developed by Chris Fraley and Adrian Raftery."
+
+- Class: cmd_question
+  Output: "Let's make sure you have the mclust package loaded. Type library(mclust)"
+  CorrectAnswer: library(mclust)
+  AnswerTests: omnitest(correctExpr='library(mclust)')
+  Hint: "type library(mclust)"
+
+- Class: text
+  Output: "When clustering with the mclust package, a number of components K must be set. Since in practice,
+  this is often not known and is something we wish to discover, mclust will multiple models with varying K and perform
+  likelihood-penalization criterion to perform model selection and choose the K that best fits the data. By default, Bayesian Information
+  Criterion (BIC) is the criterion used for model selection, however Integrated Completed Likelihood (ICL) is another choice
+  for model selection that often leads to more parsimonious models being selected. Before moving on, it is recommended that you now revisit the
+  model selection section of the markdown file."
+  
+  
+- Class: text_question
+  Output: "You fit a two component mixture model and compute both the BIC and the ICL.
+  Which criterion do you expect to be larger?"
+  CorrectAnswer: BIC
+  AnswerTests: omnitest(correctVal='BIC')
+  Hint: "ICL can be viewed as BIC with an additional penalty term for entropy. Hence ICL can never be larger than BIC."
+
+- Class: cmd_question
+  Output: "Let's explore model selection in mclust. Read the documentation for the function mclustBIC"
+  CorrectAnswer: ?mclustBIC
+  AnswerTests: omnitest(correctExpr='?mclustBIC', correctVal=VAL)
+  Hint: "type ?mclustBIC"
+
+- Class: mult_question
+  Output: "By default, what is the range for K in number of models to be fit and compared?"
+  AnswerChoices: 1-9;2-6;2-10;1-3
+  CorrectAnswer: 1-9
+  AnswerTests: omnitest(correctVal= '1-9')
+  Hint: "Look at what G does in the function."
+
+
+- Class: cmd_question
+  Output: "Run the mclustBIC function on the mv data. Fit five models with G=1:5. Also wrap
+  the function call with summary()."
+  CorrectAnswer: summary(mclustBIC(mv, G=1:5))
+  AnswerTests: omnitest(correctExpr='summary(mclustBIC(mv, G=1:5))')
+  Hint: "type summary(mclustBIC(mv, G=1:5))"
+  
+- Class: mult_question
+  Output: "How many components are favored by BIC?"
+  AnswerChoices: 3;1;2;4;5
+  CorrectAnswer: 3
+  AnswerTests: omnitest(correctVal= '3')
+  Hint: The answer is 3
+
+- Class: cmd_question
+  Output: "Now let's explore ICL. Run the mclustICL function on the mv data. Fit five models with G=1:5. Also wrap
+  the function call with summary()."
+  CorrectAnswer: summary(mclustICL(mv, G=1:5))
+  AnswerTests: omnitest(correctExpr='summary(mclustICL(mv, G=1:5))')
+  Hint: "type summary(mclustICL(mv, G=1:5))"
+  
+- Class: text
+  Output: "You should notice that that BIC and ICL both select models with the same number of components.
+  You might also notice multiple 3 component models with names such as VVV, VEV, etc. These are model assumptions for
+  the covariance structure, with VVV being the most flexible. To learn more, I recommend reading the documentation for mclust."
+
+- Class: cmd_question
+  Output: "Now let's use mclust's clustering function to cluster the data using the mvMclust() function. 
+  This is the standard function for clustering in mclust, which will also return classifications for each sample as well as
+  uncertainty estimates. Save the object to a variable called mvMclust. Again, use G=1:5 components."
+  CorrectAnswer: mvMclust = Mclust(mv, G=1:5)
+  AnswerTests: omnitest(correctExpr='mvMclust = Mclust(mv, G=1:5)')
+  Hint: "type mvMclust = Mclust(mv, G=1:5)"
+
+- Class: mult_question
+  Output: "Look at the summary of the object you just created. What algorithm is used by mclust to estimate the parameters for the mixture distribution"
+  AnswerChoices: EM;Gibbs Sampling;Newton-Raphson;Gradient Descent
+  CorrectAnswer: EM
+  AnswerTests: omnitest(correctVal= 'EM')
+  Hint: "The answer is EM"
+
+
+- Class: text
+  Output: "mclust has a number of plotting options to explore our discovered clustering. We will learn how to use three of them."
+  
+- Class: cmd_question
+  Output: "First, take a look at the function mclust2Dplot()."
+  CorrectAnswer: ?mclust2Dplot
+  AnswerTests: omnitest(correctExpr='?mclust2Dplot')
+  Hint: "type ?mclust2Dplot"
+
+- Class: cmd_question
+  Output: "Let's plot the classifications. Set what='classification'. "
+  CorrectAnswer: mclust2Dplot(data = mv, what = 'classification', parameters = mvMclust$parameters, z = mvMclust$z)
+  AnswerTests: omnitest(correctExpr='mclust2Dplot(data = mv, what = 'classification', parameters = mvMclust$parameters, z = mvMclust$z)')
+  Hint: "type mclust2Dplot(data = mv, what = 'classification', parameters = mvMclust$parameters, z = mvMclust$z)"
+
+- Class: cmd_question
+  Output: "Great. It appears the clustering does a better job that the previous kmeans. We can also assess the uncertainty among the samples classifications.
+  Let's visualize the uncertainty by typing the same code as before but changing what='uncertainty'."
+  CorrectAnswer: mclust2Dplot(data = mv, what = 'uncertainty', parameters = mvMclust$parameters, z = mvMclust$z)
+  AnswerTests: omnitest(correctExpr='mclust2Dplot(data = mv, what = 'uncertainty', parameters = mvMclust$parameters, z = mvMclust$z)')
+  Hint: "type mclust2Dplot(data = mv, what = 'uncertainty', parameters = mvMclust$parameters, z = mvMclust$z)"
+
+- Class: text
+  Output: "Awesome. Darker colors have more uncertainty, so as you can see most of the uncertainty lies in the regions of overlap between the clusters.
+  To finish up, we will now run through a real data example. The diabetes dataset contains three measurements made on 145 non-obese adult patients who we want to
+  classify into three groups of diabetes types. See ?diabetes for more information."
+
+- Class: cmd_question
+  Output: "Load the diabetes dataset into your workspace with the data() function."
+  CorrectAnswer: data(diabetes)
+  AnswerTests: omnitest(correctExpr='data(diabetes)')
+  Hint: "Type data(diabetes)"
+  
+- Class: cmd_question
+  Output: "Remove the first column of diabetes and save it toa  variable called X."
+  CorrectAnswer: X = diabetes[,-1]
+  AnswerTests: omnitest(correctExpr='X = diabetes[,-1]')
+  Hint: "Type X = diabetes[,-1]"
+
+- Class: cmd_question
+  Output: "Let's see if we can discover the number of clusters according to BIC. Use the mclustBIC function on X with default parameters.
+  Save it to a variable name BIC."
+  CorrectAnswer: BIC = mclustBIC(X)
+  AnswerTests: omnitest(correctExpr='BIC = mclustBIC(X)')
+  Hint: "type BIC = mclustBIC(X)"
+
+- Class: cmd_question
+  Output: "Now plot the BIC object that was just saved, using plot()"
+  CorrectAnswer: plot(BIC)
+  AnswerTests: omnitest(correctExpr='plot(BIC)')
+  Hint: "type plot(BIC)"
+
+- Class: mult_question
+  Output: "What seems to be the optimal number of components?"
+  AnswerChoices: 3;1;4;5;2
+  CorrectAnswer: 3
+  AnswerTests: omnitest(correctVal= '3')
+  Hint: "It is 3"
+
+- Class: cmd_question
+  Output: "Now use Mclust() with default parameters to get classifications. Save it to a variable named mod."
+  CorrectAnswer: mod = Mclust(X)
+  AnswerTests: omnitest(correctExpr='mod = Mclust(X)')
+  Hint: "mod = Mclust(X)"
+
+- Class: cmd_question
+  Output: "Use summary() to check out the clustering results."
+  CorrectAnswer: summary(mod)
+  AnswerTests: omnitest(correctExpr='summary(mod)')
+  Hint: "summary(mod)"
+
+- Class: cmd_question
+  Output: "Finally, let's plot our clustering. Use plot(X, what='classification')."
+  CorrectAnswer: plot(X, what='classification')
+  AnswerTests: omnitest(correctExpr='plot(X, what='classification')')
+  Hint: "plot(X, what='classification')"
+  
+- Class: text
+  Output: "Amazing job! I hope you learned a lot about model based clustering!!!"
