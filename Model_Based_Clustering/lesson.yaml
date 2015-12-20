@@ -174,7 +174,7 @@
 - Class: cmd_question
   Output: "Let's explore model selection in mclust. Read the documentation for the function mclustBIC"
   CorrectAnswer: ?mclustBIC
-  AnswerTests: omnitest(correctExpr='?mclustBIC', correctVal=VAL)
+  AnswerTests: omnitest(correctExpr='?mclustBIC')
   Hint: "type ?mclustBIC"
 
 - Class: mult_question
