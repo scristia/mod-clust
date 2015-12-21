@@ -301,7 +301,7 @@
 - Class: cmd_question
   Output: "Finally, let's plot our clustering. Use plot(mod, what='classification')."
   CorrectAnswer: plot(mod, what='classification')
-  AnswerTests: omnitest(correctExpr='plot(X, what="classification")')
+  AnswerTests: omnitest(correctExpr='plot(mod, what="classification")')
   Hint: "plot(mod, what='classification')"
   
 - Class: text
